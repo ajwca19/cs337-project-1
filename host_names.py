@@ -21,11 +21,12 @@ def get_names(tweets, ceremony_name):
     
     #start by extracting relevant tweets' text: eliminate retweets and only add tweets with a form of "host"
     tweets_with_host = [] #list of strings containing the word "host", "hosts", "hosting", "hosted", etc.
-    
+    hashtag_re = "#[a-zA-Z0-9_]+" #regex to remove hashtags from the data
     for i in range(0, len(tweets)):
         tweet_text = tweets.loc[i]['text']
         if re.search("host(s*)", tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
-            tweets_with_host.append(tweet_text)
+            cleaned_text = re.sub(hashtag_re, "", tweet_text)
+            tweets_with_host.append(cleaned_text)
     
     #then parse the tweets with spacy to get relevant information
     parsed_tweets = map(nlp, tweets_with_host)
@@ -61,6 +62,7 @@ def cluster_entities(parsed_tweets):
                 else:
                     entities_counts[person] = 1
                     entities_clusters[person] = person
+                    
 
     entities_to_remove = set()
     for entity_a in entities_clusters:
@@ -135,16 +137,16 @@ def find_likely_hosts(candidates, host_number):
                 likely_host_count = candidates[candidate]
         return [likely_host]
     else: #plural case
-        vote_distribution = list(entities_counts.values())
+        vote_distribution = list(candidates.values())
         average_count = sum(vote_distribution)/len(vote_distribution)
         likely_hosts = []
-        for candidate in entities_counts:
-            if entities_counts[candidate] >= average_count:
+        for candidate in candidates:
+            if candidates[candidate] >= average_count:
                 likely_hosts.append(candidate)
-        likely_hosts = sorted(likely_hosts, key = lambda e : entities_counts[e], reverse = True)
+        likely_hosts = sorted(likely_hosts, key = lambda e : candidates[e], reverse = True)
         #must be at least 2 hosts - start cutoffs at index 1
         for i in range(1, len(likely_hosts) - 1):
-            if entities_counts[likely_hosts[i + 1]] / entities_counts[likely_hosts[i]] < 0.5:
+            if candidates[likely_hosts[i + 1]] / candidates[likely_hosts[i]] < 0.5:
                 likely_hosts = likely_hosts[:i+1]
                 break
         return likely_hosts
