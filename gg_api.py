@@ -16,6 +16,7 @@ import en_core_web_sm
 from heapq import nlargest
 from gensim.models import Word2Vec
 import numpy as np
+from textblob import TextBlob
 
 nlp = en_core_web_sm.load()
 nltk.download("punkt", quiet = True)
@@ -23,6 +24,7 @@ nltk.download("punkt", quiet = True)
 #import external files used in solution
 import host_names
 import awards_from_ceremony
+import winners_from_awards_and_nominees
 
 #-------------------- VARIABLES GIVEN IN GG_API FILE ------------------
 OFFICIAL_AWARDS_1315 = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
@@ -32,11 +34,39 @@ OFFICIAL_AWARDS_1819 = ['best motion picture - drama', 'best motion picture - mu
 ceremony_name = "Golden Globes"
 
 #--------------- HELPER FUNCTIONS BELOW ----------------------
+# Function to clean imported tweets
 def clean_tweet(tweet_text):
     retweet_re = "^[rR][tT] @[a-zA-Z0-9_]*: "
     hyperlink_re = "http://[a-zA-Z0-9./-]*"
     hashtag_re = "#[a-zA-Z0-9_]+"
     return re.sub(hyperlink_re, "", tweet_text)
+
+# Function to identify the award based on the text of a tweet
+def identify_award(award_list_split, tweet_text):
+    award_similarities = [] # Metric trying to figure out how similar the text of a tweet is to each award
+    curr_award_number = 0
+    for award in award_list_split: # Loop through awards to get individual lists of keywords
+        award_similarities.append(0) # Start the tally at 0
+        for word in award: # Look for each of the keywords in the award
+            if re.search(word, tweet_text):
+                award_similarities[curr_award_number] += 1 # Add one to the tally because the tweet has the keyword
+        curr_award_number += 1
+    if sum(award_similarities) != 0: # At least one award was relevant to the text of a tweet
+        # Reset award number count and figure out the index of the award with the max similarity
+        curr_award_number = 0 # Reset curr_award_number
+        likely_award_number = 0
+        likely_award_max = -1
+        for award_similarity in award_similarities:
+            if award_similarity > likely_award_max:
+                likely_award_max = award_similarity
+                likely_award_number = curr_award_number
+            elif award_similarity == likely_award_max: # Handle tie cases
+                if random.randint(0, 1) == 1:
+                    likely_award_number = curr_award_number
+            curr_award_number += 1
+        return likely_award_number
+    else:
+        return None
 
 #----------- INCLUDED FUNCTIONS --------------
 def get_hosts(year):
@@ -48,7 +78,6 @@ def get_hosts(year):
 def get_awards(year):
     '''Awards is a list of strings. Do NOT change the name
     of this function or what it returns.'''
-    # Running the program
     # Searching tweets for awards and saving the top 10 hashtags
     possible_award_tweets, hashtags_list = awards_from_ceremony.search_tweets(tweets, "wins best|nominated for best", 10)
     # Extracting all possible words of length 4-20 from the saved hashtags
@@ -73,7 +102,12 @@ def get_winner(year, awards_list, nominees_list):
     '''Winners is a dictionary with the hard coded award
     names as keys, and each entry containing a single string.
     Do NOT change the name of this function or what it returns.'''
-    # Your code here
+    # Processing the award names and creating intial data structures
+    award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(awards_list)
+    # Going through each tweet and trying to find each award and nominee
+    match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(tweets, award_list_split_updated, nominees_list, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
+    # Find the nominee winner based on the "votes", and linking in the average tweet sentiment of them winning
+    winners = winners_from_awards_and_nominees.identify_winner(match_count_dict, sentiment_polarity_dict)
     return winners
 
 def get_presenters(year):
@@ -123,6 +157,11 @@ def main():
         award_name_string = award_name_string + ", " + awards[i].title()
     award_name_string = award_name_string + ", & " + awards[-1].title()
     print("The award categories are:", award_name_string)
+    nominees_list = winners_from_awards_and_nominees.nominees_list() # *********** CHANGE THIS NOMINEES_LIST TO THE INFERRED NOMINEES ***************
+    winners = get_winner(year, awards, nominees_list)
+    print("The winners are:")
+    for award, winner in winners.items():
+        print(award.title() + ": " + winner['winner'].title() + ", with an average sentiment of " + str(winner['average_polarity']))
     return
 
 if __name__ == '__main__':

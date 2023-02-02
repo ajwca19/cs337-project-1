@@ -5,22 +5,24 @@ import re
 import random
 from textblob import TextBlob
 
+import gg_api
+
 # Writing helper functions
 # Function to import the gg2013 tweets file
-def import_tweets():
-    global tweets
-    tweets = pd.read_json('gg2013.json')
-    for i in range(0, len(tweets)): 
-        cleaned_tweet = clean_tweet(tweets.loc[i]['text'])
-        tweets.at[i, 'text'] = cleaned_tweet
-    return
+#def import_tweets():
+#    global tweets
+#    tweets = pd.read_json('gg2013.json')
+#    for i in range(0, len(tweets)): 
+#        cleaned_tweet = clean_tweet(tweets.loc[i]['text'])
+#        tweets.at[i, 'text'] = cleaned_tweet
+#    return
 
 # Function to process the gg2013 tweets file
-def clean_tweet(tweet_text):
-    retweet_re = "^[rR][tT] @[a-zA-Z0-9_]*: "
-    hyperlink_re = "http://[a-zA-Z0-9./-]*"
-    hashtag_re = "#[a-zA-Z0-9_]+"
-    return re.sub(hyperlink_re, "", tweet_text)
+#def clean_tweet(tweet_text):
+#    retweet_re = "^[rR][tT] @[a-zA-Z0-9_]*: "
+#    hyperlink_re = "http://[a-zA-Z0-9./-]*"
+#    hashtag_re = "#[a-zA-Z0-9_]+"
+#    return re.sub(hyperlink_re, "", tweet_text)
 
 # Function to process the nominee answers
 def nominees_list():
@@ -72,7 +74,7 @@ def winner_match(tweets, award_list_split_updated, nominees_list, award_list_uns
         if len(tweet_list) == 2: # Tweet has the word "wins"
             tweet_nominees = tweet_list[0] # Left side of the word wins, assumed to contain the name of nominees
             tweet_award = tweet_list[1] # Right side of the word wins, assumed to contain the name of awards
-            likely_award_number = identify_award(award_list_split_updated, tweet_award)
+            likely_award_number = gg_api.identify_award(award_list_split_updated, tweet_award)
             if likely_award_number is not None:
                 # Try to identify the nominee based on the nominees for the most likely award
                 # Also perform sentiment analysis on the tweets to get a sense of people's opinions on a nominee winning their award
@@ -94,33 +96,6 @@ def winner_match(tweets, award_list_split_updated, nominees_list, award_list_uns
             tweet_award = ""
     return (match_count_dict, sentiment_polarity_dict)
 
-# Function to identify the award based on the text of a tweet
-def identify_award(award_list_split_updated, tweet_text):
-    award_similarities = [] # Metric trying to figure out how similar the text of a tweet is to each award
-    curr_award_number = 0
-    for award in award_list_split_updated: # Loop through awards to get individual lists of keywords
-        award_similarities.append(0) # Start the tally at 0
-        for word in award: # Look for each of the keywords in the award
-            if re.search(word, tweet_text):
-                award_similarities[curr_award_number] += 1 # Add one to the tally because the tweet has the keyword
-        curr_award_number += 1
-    if sum(award_similarities) != 0: # At least one award was relevant to the text of a tweet
-        # Reset award number count and figure out the index of the award with the max similarity
-        curr_award_number = 0 # Reset curr_award_number
-        likely_award_number = 0
-        likely_award_max = -1
-        for award_similarity in award_similarities:
-            if award_similarity > likely_award_max:
-                likely_award_max = award_similarity
-                likely_award_number = curr_award_number
-            elif award_similarity == likely_award_max: # Handle tie cases
-                if random.randint(0, 1) == 1:
-                    likely_award_number = curr_award_number
-            curr_award_number += 1
-        return likely_award_number
-    else:
-        return None
-
 # Function to find the nominee winner based on the "votes", and link in the average tweet sentiment of them winning
 def identify_winner(match_count_dict, sentiment_polarity_dict):
     winners = {}
@@ -141,20 +116,3 @@ def identify_winner(match_count_dict, sentiment_polarity_dict):
         winners[award_key]['winner'] = nominee_winner
         winners[award_key]['average_polarity'] = average_polarity
     return winners
-
-
-
-
-# Running the program
-# Importing and processing the tweets
-import_tweets()
-
-# Processing the award names and creating intial data structures
-award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = awards_process(pd.read_csv('answers.csv', usecols = ['award'])['award'].tolist()) # CHANGE THE AWARDS_PROCESS ARGUMENT TO THE INFERRED AWARD NAMES
-
-# Going through each tweet and trying to find each award and nominee
-nominees_list = nominees_list() # CHANGE THIS NOMINEES_LIST TO THE INFERRED NOMINEES
-match_count_dict, sentiment_polarity_dict = winner_match(tweets, award_list_split_updated, nominees_list, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
-
-# Find the nominee winner based on the "votes", and linking in the average tweet sentiment of them winning
-winners = identify_winner(match_count_dict, sentiment_polarity_dict)
