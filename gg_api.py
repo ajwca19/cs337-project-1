@@ -69,7 +69,7 @@ def get_nominees(year):
     # Your code here
     return nominees
 
-def get_winner(year):
+def get_winner(year, awards_list, nominees_list):
     '''Winners is a dictionary with the hard coded award
     names as keys, and each entry containing a single string.
     Do NOT change the name of this function or what it returns.'''
