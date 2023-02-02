@@ -1,22 +1,28 @@
 '''Version 0.35'''
 
-#importing necessary modules - pandas, nltk, regex, spacy, and RNG
+#importing necessary modules
 import pandas as pd
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.tag import pos_tag
+from nltk.cluster import KMeansClusterer
 import re
 import random
 import spacy
 from spacy import displacy
 from collections import Counter
+#python -m spacy download en
 import en_core_web_sm
+from heapq import nlargest
+from gensim.models import Word2Vec
+import numpy as np
 
 nlp = en_core_web_sm.load()
-nltk.download("punkt")
+nltk.download("punkt", quiet = True)
 
 #import external files used in solution
 import host_names
+import awards_from_ceremony
 
 #-------------------- VARIABLES GIVEN IN GG_API FILE ------------------
 OFFICIAL_AWARDS_1315 = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
@@ -26,7 +32,6 @@ OFFICIAL_AWARDS_1819 = ['best motion picture - drama', 'best motion picture - mu
 ceremony_name = "Golden Globes"
 
 #--------------- HELPER FUNCTIONS BELOW ----------------------
-
 def clean_tweet(tweet_text):
     retweet_re = "^[rR][tT] @[a-zA-Z0-9_]*: "
     hyperlink_re = "http://[a-zA-Z0-9./-]*"
@@ -43,7 +48,18 @@ def get_hosts(year):
 def get_awards(year):
     '''Awards is a list of strings. Do NOT change the name
     of this function or what it returns.'''
-    # Your code here
+    # Running the program
+    # Searching tweets for awards and saving the top 10 hashtags
+    possible_award_tweets, hashtags_list = awards_from_ceremony.search_tweets(tweets, "wins best|nominated for best", 10)
+    # Extracting all possible words of length 4-20 from the saved hashtags
+    extracted_word_list = awards_from_ceremony.hashtag_extract(hashtags_list, 4, 20)
+    # Extracting and cleaning possible award names from the returned tweets, and generating word embeddings for the possible award names
+    possible_award_names, embeddings = awards_from_ceremony.award_extract(possible_award_tweets, extracted_word_list)
+    # Generating the award-level embeddings for each unique possible award name, and clustering the award-level embeddings into 25 clusters using K-means clustering
+    possible_award_names_clusters, award_clusters_dict = awards_from_ceremony.cluster_award_embeddings(possible_award_names, embeddings, 25)
+    # Selecting the most frequently mentioned possible award name from each cluster, if the possible award name was tweeted at least twice
+    awards = awards_from_ceremony.final_awards(possible_award_names_clusters, award_clusters_dict, 1)
+    # Returns final list of inferred award names: awards
     return awards
 
 def get_nominees(year):
@@ -74,7 +90,7 @@ def pre_ceremony():
     Do NOT change the name of this function or what it returns.'''
     # Reading in and processing the gg2013 tweets file:
     # Change file name below to change tweet database
-    global tweets 
+    global tweets
     tweets = pd.read_json('gg2013.json')
     for i in range(0, len(tweets)): 
         cleaned_tweet = clean_tweet(tweets.loc[i]['text'])
@@ -90,19 +106,24 @@ def main():
     what it returns.'''
     # Your code here
     pre_ceremony()
-    hosts = get_hosts(2013)
+    year = 2013
+    print("Ceremony:", ceremony_name, year)
+    hosts = get_hosts(year)
     if len(hosts) == 1:
         print("The host is: " + hosts[0])
     else:
         host_name_string = hosts[0]
         for i in range(1, len(hosts) - 1):
-              host_name_string = host_name_string + ", " + hosts[i]
+            host_name_string = host_name_string + ", " + hosts[i]
         host_name_string = host_name_string + " & " + hosts[-1]
         print("The hosts are: " + host_name_string)
+    awards = get_awards(year)
+    award_name_string = awards[0].title()
+    for i in range(1, len(awards) - 1):
+        award_name_string = award_name_string + ", " + awards[i].title()
+    award_name_string = award_name_string + ", & " + awards[-1].title()
+    print("The award categories are:", award_name_string)
     return
 
 if __name__ == '__main__':
     main()
-
-
-

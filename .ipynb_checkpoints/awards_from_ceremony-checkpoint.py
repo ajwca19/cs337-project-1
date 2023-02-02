@@ -9,25 +9,29 @@ from gensim.models import Word2Vec
 import numpy as np
 
 # Writing helper functions
-# Function to import and process the gg2013 tweets file
-def import_tweets(json_file):
-    tweets = pd.read_json(json_file)
-    # Subsetting to tweets that are not retweets
-    no_retweets = []
-    for j in range(0, len(tweets)):
-        text = tweets.loc[j]['text']
-        if not re.search("^RT", text):
-            no_retweets.append(text.lower())
-    no_retweets_df = pd.DataFrame({'text': no_retweets})
-    return no_retweets_df
+# Function to import the gg2013 tweets file
+#def import_tweets():
+#    global tweets
+#    tweets = pd.read_json('gg2013.json')
+#    for i in range(0, len(tweets)): 
+#        cleaned_tweet = clean_tweet(tweets.loc[i]['text'])
+#        tweets.at[i, 'text'] = cleaned_tweet
+#    return
+
+# Function to process the gg2013 tweets file
+#def clean_tweet(tweet_text):
+#    retweet_re = "^[rR][tT] @[a-zA-Z0-9_]*: "
+#    hyperlink_re = "http://[a-zA-Z0-9./-]*"
+#    hashtag_re = "#[a-zA-Z0-9_]+"
+#    return re.sub(hyperlink_re, "", tweet_text)
 
 # Function to search tweets for the specified regular expression, and save the top N hashtags
 def search_tweets(tweets, reg_ex, ht_num):
     returned_tweets = [] # List of tweets matching specified regular expression
     hashtags = {} # Dictionary of hashtags used in tweets
     for j in range(0, len(tweets)):
-        text = tweets.loc[j]['text']
-        if re.search(reg_ex, text):
+        text = tweets.loc[j]['text'].lower()
+        if re.search(reg_ex, text) and not re.search("^[Rr][Tt]", text): # No retweets
             returned_tweets.append(text) # Save a tweet if it contains the specified regular expression
             matches = re.finditer("#[a-z0-9]+\s{1}|#[a-z0-9]+$", text) # Among the extracted tweets, pull out and save all the unique hashtags
             for hashtag in matches:
@@ -111,7 +115,9 @@ def cluster_award_embeddings(possible_award_names, embeddings, cluster_num):
     for possible_award in possible_award_names:
         award_embeddings.append(create_award_embedding(possible_award, embeddings))
     # Clustering the award-level embeddings into N clusters using K-means clustering
-    kmeans = KMeansClusterer(cluster_num, distance = nltk.cluster.util.cosine_distance, repeats = 10, avoid_empty_clusters = True)
+    rng = random.Random()
+    rng.seed(321)
+    kmeans = KMeansClusterer(cluster_num, distance = nltk.cluster.util.cosine_distance, repeats = 10, avoid_empty_clusters = True, rng = rng)
     award_clusters = kmeans.cluster(award_embeddings, assign_clusters = True)
     # Joining together the individual words of the possible award names to generate one phrase per award
     possible_award_names_clusters = []
@@ -156,26 +162,3 @@ def final_awards(possible_award_names_clusters, award_clusters_dict, min_tweet):
     while "" in final_awards:
         final_awards.remove("")
     return final_awards
-
-
-
-
-# Running the program
-# Importing the gg2013 tweets file
-no_retweets_df = import_tweets('gg2013.json')
-
-# Searching tweets for awards and saving the top 10 hashtags
-possible_award_tweets, hashtags_list = search_tweets(no_retweets_df, "wins best|nominated for best", 10)
-
-# Extracting all possible words of length 4-20 from the saved hashtags
-extracted_word_list = hashtag_extract(hashtags_list, 4, 20)
-
-# Extracting and cleaning possible award names from the returned tweets, and generating word embeddings for the possible award names
-possible_award_names, embeddings = award_extract(possible_award_tweets, extracted_word_list)
-
-# Generating the award-level embeddings for each unique possible award name, and clustering the award-level embeddings into 25 clusters using K-means clustering
-possible_award_names_clusters, award_clusters_dict = cluster_award_embeddings(possible_award_names, embeddings, 25)
-
-# Selecting the most frequently mentioned possible award name from each cluster, if the possible award name was tweeted at least twice
-final_awards = final_awards(possible_award_names_clusters, award_clusters_dict, 1)
-# Returns final list of inferred award names: final_awards
