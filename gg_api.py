@@ -96,6 +96,7 @@ def get_nominees(year):
     names as keys, and each entry a list of strings. Do NOT change
     the name of this function or what it returns.'''
     # Your code here
+    nominees = nominee_from_tweets.main(tweets, ceremony_name, year, OFFICIAL_AWARDS_1315)
     return nominees
 
 def get_winner(year, awards_list, nominees_list):
@@ -157,6 +158,10 @@ def main():
         award_name_string = award_name_string + ", " + awards[i].title()
     award_name_string = award_name_string + ", & " + awards[-1].title()
     print("The award categories are:", award_name_string)
+    nominee_dict = get_nominees(year)
+    # How to use nominee list -> nominee_from_tweets.nominee_all_list
+    # ['paul rudd', 'daniel craig', 'damian lewis', 'kevin costner', ... ]
+    # print(nominee_from_tweets.nominee_all_list)
     nominees_list = winners_from_awards_and_nominees.nominees_list() # *********** CHANGE THIS NOMINEES_LIST TO THE INFERRED NOMINEES ***************
     winners = get_winner(year, awards, nominees_list)
     print("The winners are:")
