@@ -87,6 +87,7 @@ def get_awards(year):
     # Generating the award-level embeddings for each unique possible award name, and clustering the award-level embeddings into 25 clusters using K-means clustering
     possible_award_names_clusters, award_clusters_dict = awards_from_ceremony.cluster_award_embeddings(possible_award_names, embeddings, 25)
     # Selecting the most frequently mentioned possible award name from each cluster, if the possible award name was tweeted at least twice
+    global awards
     awards = awards_from_ceremony.final_awards(possible_award_names_clusters, award_clusters_dict, 1)
     # Returns final list of inferred award names: awards
     return awards
@@ -96,17 +97,18 @@ def get_nominees(year):
     names as keys, and each entry a list of strings. Do NOT change
     the name of this function or what it returns.'''
     # Your code here
+    global nominees
     nominees = nominee_from_tweets.main(tweets, ceremony_name, year, OFFICIAL_AWARDS_1315)
     return nominees
 
-def get_winner(year, awards_list, nominees_list):
+def get_winner(year):
     '''Winners is a dictionary with the hard coded award
     names as keys, and each entry containing a single string.
     Do NOT change the name of this function or what it returns.'''
     # Processing the award names and creating intial data structures
-    award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(awards_list)
+    award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(awards)
     # Going through each tweet and trying to find each award and nominee
-    match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(tweets, award_list_split_updated, nominees_list, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
+    match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(tweets, award_list_split_updated, nominees, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
     # Find the nominee winner based on the "votes", and linking in the average tweet sentiment of them winning
     winners = winners_from_awards_and_nominees.identify_winner(match_count_dict, sentiment_polarity_dict)
     return winners
