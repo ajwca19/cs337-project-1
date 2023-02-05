@@ -55,7 +55,7 @@ def cluster_entities(parsed_tweets):
     entities_clusters = {} #dictionary with key: entity name and value: name of "representative" entity
     for parsed_tweet in parsed_tweets:
         for entity in parsed_tweet.ents:
-            if entity.label_ == "PERSON" and re.match("[a-zA-Z0-9.'’+-_@/]+", entity.text):
+            if entity.label_ == "PERSON" and re.match("[a-zA-Z0-9\.'’+-_@/]+", entity.text):
                 person = entity.text
                 if person in entities_clusters:
                     entities_counts[person] += 1

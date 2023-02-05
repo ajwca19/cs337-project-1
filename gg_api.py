@@ -17,6 +17,7 @@ from heapq import nlargest
 from gensim.models import Word2Vec
 import numpy as np
 from textblob import TextBlob
+from spacytextblob.spacytextblob import SpacyTextBlob
 
 nlp = en_core_web_sm.load()
 nltk.download("punkt", quiet = True)
@@ -32,6 +33,14 @@ OFFICIAL_AWARDS_1819 = ['best motion picture - drama', 'best motion picture - mu
 
 #----------- OUR VARIABLES ---------------
 ceremony_name = "Golden Globes"
+
+#list of buckets for corresponding functions/algorithms
+host_bucket = []
+award_bucket = []
+presenter_bucket = []
+nominees_bucket = []
+winner_bucket = []
+
 
 #--------------- HELPER FUNCTIONS BELOW ----------------------
 # Function to clean imported tweets
@@ -68,6 +77,12 @@ def identify_award(award_list_split, tweet_text):
     else:
         return None
 
+def add_to_buckets(tweet):
+    tweet_text = tweets.loc[i]['text']
+    if re.search("host(s*)", tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
+        #conditions for being in host bucket
+        host_bucket.append(re.sub(hashtag_re, "", tweet_text))
+    
 #----------- INCLUDED FUNCTIONS --------------
 def get_hosts(year):
     '''Hosts is a list of one or more strings. Do NOT change the name
@@ -87,6 +102,7 @@ def get_awards(year):
     # Generating the award-level embeddings for each unique possible award name, and clustering the award-level embeddings into 25 clusters using K-means clustering
     possible_award_names_clusters, award_clusters_dict = awards_from_ceremony.cluster_award_embeddings(possible_award_names, embeddings, 25)
     # Selecting the most frequently mentioned possible award name from each cluster, if the possible award name was tweeted at least twice
+    global awards
     awards = awards_from_ceremony.final_awards(possible_award_names_clusters, award_clusters_dict, 1)
     # Returns final list of inferred award names: awards
     return awards
@@ -96,17 +112,18 @@ def get_nominees(year):
     names as keys, and each entry a list of strings. Do NOT change
     the name of this function or what it returns.'''
     # Your code here
+    global nominees
     nominees = nominee_from_tweets.main(tweets, ceremony_name, year, OFFICIAL_AWARDS_1315)
     return nominees
 
-def get_winner(year, awards_list, nominees_list):
+def get_winner(year):
     '''Winners is a dictionary with the hard coded award
     names as keys, and each entry containing a single string.
     Do NOT change the name of this function or what it returns.'''
     # Processing the award names and creating intial data structures
-    award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(awards_list)
+    award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(awards)
     # Going through each tweet and trying to find each award and nominee
-    match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(tweets, award_list_split_updated, nominees_list, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
+    match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(tweets, award_list_split_updated, nominees, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
     # Find the nominee winner based on the "votes", and linking in the average tweet sentiment of them winning
     winners = winners_from_awards_and_nominees.identify_winner(match_count_dict, sentiment_polarity_dict)
     return winners
@@ -129,6 +146,7 @@ def pre_ceremony():
     tweets = pd.read_json('gg2013.json')
     for i in range(0, len(tweets)): 
         cleaned_tweet = clean_tweet(tweets.loc[i]['text'])
+        add_to_buckets(cleaned_tweet)
         tweets.at[i, 'text'] = cleaned_tweet
     print("Pre-ceremony processing complete.")
     return
