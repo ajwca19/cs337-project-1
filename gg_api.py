@@ -92,6 +92,17 @@ def add_to_buckets(tweet):
     for keyword in fashion_keywords:
         if re.search(keyword, tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
             fashion_bucket.append(re.sub(hashtag_re, "", tweet_text))
+            
+    #for awards
+    
+    #for presenters
+    
+    #for nominees
+    
+    
+    #for winners
+    if re.search("wins", tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
+        winner_bucket.append(tweet_text)
     
 #----------- INCLUDED FUNCTIONS --------------
 def get_hosts(year):
@@ -133,7 +144,7 @@ def get_winner(year):
     # Processing the award names and creating intial data structures
     award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(awards)
     # Going through each tweet and trying to find each award and nominee
-    match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(tweets, award_list_split_updated, nominees, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
+    match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(winner_bucket, award_list_split_updated, nominees, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
     # Find the nominee winner based on the "votes", and linking in the average tweet sentiment of them winning
     winners = winners_from_awards_and_nominees.identify_winner(match_count_dict, sentiment_polarity_dict)
     return winners

@@ -68,9 +68,7 @@ def awards_process(awards_list):
 # Function to go through each tweet that says 'wins' and try to identify which award and nominee it's associated with
 def winner_match(tweets, award_list_split_updated, nominees_list, award_list_unsplit, match_count_dict, sentiment_polarity_dict):
     for j in range(0, len(tweets)):
-        text = tweets.loc[j]['text'].lower()
-        if not re.search("^[Rr][Tt]", text): # No retweets
-            tweet_list = text.split("wins")
+        tweet_list = text.split("wins")
         if len(tweet_list) == 2: # Tweet has the word "wins"
             tweet_nominees = tweet_list[0] # Left side of the word wins, assumed to contain the name of nominees
             tweet_award = tweet_list[1] # Right side of the word wins, assumed to contain the name of awards
