@@ -93,11 +93,11 @@ def add_to_buckets(tweet):
         if re.search(keyword, tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
             fashion_bucket.append(re.sub(hashtag_re, "", tweet_text))
             
-    #for awards
+    #for awards - skip because Ben's uses hashtag stuff
     
-    #for presenters
+    #for presenters - skip because Jordan's has lots of cleansing steps not included
     
-    #for nominees
+    #for nominees - skip because Karen's has lots of cleansing steps not included
     
     
     #for winners
