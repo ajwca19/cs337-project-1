@@ -9,6 +9,7 @@ from nltk.cluster import KMeansClusterer
 import re
 import random
 import spacy
+import json
 from spacy import displacy
 from collections import Counter
 #python -m spacy download en
@@ -17,6 +18,7 @@ from heapq import nlargest
 from gensim.models import Word2Vec
 import numpy as np
 from textblob import TextBlob
+from spacytextblob.spacytextblob import SpacyTextBlob
 
 nlp = en_core_web_sm.load()
 nltk.download("punkt", quiet = True)
@@ -25,6 +27,7 @@ nltk.download("punkt", quiet = True)
 import host_names
 import awards_from_ceremony
 import winners_from_awards_and_nominees
+import fashion
 
 #-------------------- VARIABLES GIVEN IN GG_API FILE ------------------
 OFFICIAL_AWARDS_1315 = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
@@ -32,6 +35,15 @@ OFFICIAL_AWARDS_1819 = ['best motion picture - drama', 'best motion picture - mu
 
 #----------- OUR VARIABLES ---------------
 ceremony_name = "Golden Globes"
+
+#list of buckets for corresponding functions/algorithms
+host_bucket = []
+award_bucket = []
+presenter_bucket = []
+nominees_bucket = []
+winner_bucket = []
+fashion_bucket = []
+
 
 #--------------- HELPER FUNCTIONS BELOW ----------------------
 # Function to clean imported tweets
@@ -68,11 +80,24 @@ def identify_award(award_list_split, tweet_text):
     else:
         return None
 
+def add_to_buckets(tweet):
+    tweet_text = tweets.loc[i]['text']
+    #for hosts
+    if re.search("host(s*)", tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
+        #conditions for being in host bucket
+        host_bucket.append(re.sub(hashtag_re, "", tweet_text))
+    
+    #for fashion
+    fashion_keywords = ["dress", "outfit", "fashion", "red carpet", "suit", "look", "jewelry", "accessor[y|ies]"]
+    for keyword in fashion_keywords:
+        if re.search(keyword, tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
+            fashion_bucket.append(re.sub(hashtag_re, "", tweet_text))
+    
 #----------- INCLUDED FUNCTIONS --------------
 def get_hosts(year):
     '''Hosts is a list of one or more strings. Do NOT change the name
     of this function or what it returns.'''
-    hosts = host_names.get_names(tweets, ceremony_name + " " + str(year))
+    hosts = host_names.get_names(host_bucket, ceremony_name + " " + str(year))
     return hosts
 
 def get_awards(year):
@@ -131,6 +156,7 @@ def pre_ceremony():
     tweets = pd.read_json('gg2013.json')
     for i in range(0, len(tweets)): 
         cleaned_tweet = clean_tweet(tweets.loc[i]['text'])
+        add_to_buckets(cleaned_tweet)
         tweets.at[i, 'text'] = cleaned_tweet
     print("Pre-ceremony processing complete.")
     return
@@ -145,6 +171,8 @@ def main():
     pre_ceremony()
     year = 2013
     print("Ceremony:", ceremony_name, year)
+    
+    #extracting hosts
     hosts = get_hosts(year)
     if len(hosts) == 1:
         print("The host is: " + hosts[0])
@@ -154,21 +182,46 @@ def main():
             host_name_string = host_name_string + ", " + hosts[i]
         host_name_string = host_name_string + " & " + hosts[-1]
         print("The hosts are: " + host_name_string)
+        
+    #extracting awards
     awards = get_awards(year)
     award_name_string = awards[0].title()
     for i in range(1, len(awards) - 1):
         award_name_string = award_name_string + ", " + awards[i].title()
     award_name_string = award_name_string + ", & " + awards[-1].title()
     print("The award categories are:", award_name_string)
+    
+    #extracting nominees
     nominee_dict = get_nominees(year)
     # How to use nominee list -> nominee_from_tweets.nominee_all_list
     # ['paul rudd', 'daniel craig', 'damian lewis', 'kevin costner', ... ]
     # print(nominee_from_tweets.nominee_all_list)
     nominees_list = winners_from_awards_and_nominees.nominees_list() # *********** CHANGE THIS NOMINEES_LIST TO THE INFERRED NOMINEES ***************
-    winners = get_winner(year, awards, nominees_list)
+    
+    #extracting presenters
+    
+    #extracting winners
+    winners = get_winner(year)
     print("The winners are:")
     for award, winner in winners.items():
         print(award.title() + ": " + winner['winner'].title() + ", with an average sentiment of " + str(winner['average_polarity']))
+        
+    #extracting best/worst dressed:
+    best_dressed, worst_dressed = fashion.best_worst_dressed(fashion_bucket)
+    best_dressed_string = best_dressed[0]
+        for i in range(1, len(best_dressed) - 1):
+            best_dressed_string = best_dressed_string + ", " + best_dressed[i]
+        best_dressed_string = best_dressed_string + " & " + best_dressed[-1]
+    worst_dressed_string = worst_dressed[0]
+        for i in range(1, len(worst_dressed) - 1):
+            worst_dressed_string = worst_dressed_string + ", " + worst_dressed[i]
+        worst_dressed_string = worst_dressed_string + " & " + worst_dressed[-1]
+    print("The best dressed of the night are: " + best_dressed_string)
+    print("The worst dressed of the night are: " + worst_dressed_string)
+    #putting official answers in the json file
+    json_object = {}
+    json_object["Hosts"] = hosts
+    j
     return
 
 if __name__ == '__main__':

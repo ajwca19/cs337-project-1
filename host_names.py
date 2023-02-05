@@ -20,16 +20,16 @@ nltk.download("punkt")
 def get_names(tweets, ceremony_name):
     
     #start by extracting relevant tweets' text: eliminate retweets and only add tweets with a form of "host"
-    tweets_with_host = [] #list of strings containing the word "host", "hosts", "hosting", "hosted", etc.
-    hashtag_re = "#[a-zA-Z0-9_]+" #regex to remove hashtags from the data
-    for i in range(0, len(tweets)):
-        tweet_text = tweets.loc[i]['text']
-        if re.search("host(s*)", tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
-            cleaned_text = re.sub(hashtag_re, "", tweet_text)
-            tweets_with_host.append(cleaned_text)
+    #tweets_with_host = [] #list of strings containing the word "host", "hosts", "hosting", "hosted", etc.
+    #hashtag_re = "#[a-zA-Z0-9_]+" #regex to remove hashtags from the data
+    #for i in range(0, len(tweets)):
+    #    tweet_text = tweets.loc[i]['text']
+    #    if re.search("host(s*)", tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
+    #        cleaned_text = re.sub(hashtag_re, "", tweet_text)
+    #        tweets_with_host.append(cleaned_text)
     
     #then parse the tweets with spacy to get relevant information
-    parsed_tweets = map(nlp, tweets_with_host)
+    parsed_tweets = map(nlp, tweets)
     
     cluster_output = cluster_entities(parsed_tweets)
     entities_counts = cluster_output[0] #dictionary with key: entity name and value: number of appearances in tweets
