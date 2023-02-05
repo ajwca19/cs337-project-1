@@ -28,6 +28,8 @@ import host_names
 import awards_from_ceremony
 import winners_from_awards_and_nominees
 import fashion
+import presenters_from_awards
+import nominees_from_awards
 
 #-------------------- VARIABLES GIVEN IN GG_API FILE ------------------
 OFFICIAL_AWARDS_1315 = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
@@ -142,7 +144,8 @@ def get_winner(year):
     names as keys, and each entry containing a single string.
     Do NOT change the name of this function or what it returns.'''
     # Processing the award names and creating intial data structures
-    award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(awards)
+    # using the hard-coded award names to do this as well
+    award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(OFFICIAL_AWARDS_1315)
     # Going through each tweet and trying to find each award and nominee
     match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(winner_bucket, award_list_split_updated, nominees, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
     # Find the nominee winner based on the "votes", and linking in the average tweet sentiment of them winning
@@ -153,7 +156,7 @@ def get_presenters(year):
     '''Presenters is a dictionary with the hard coded award
     names as keys, and each entry a list of strings. Do NOT change the
     name of this function or what it returns.'''
-    # Your code here
+    presenters = presenters_from_awards
     return presenters
 
 def pre_ceremony():
@@ -210,7 +213,7 @@ def main():
     nominees_list = winners_from_awards_and_nominees.nominees_list() # *********** CHANGE THIS NOMINEES_LIST TO THE INFERRED NOMINEES ***************
     
     #extracting presenters
-    
+    presenter_dict = 
     #extracting winners
     winners = get_winner(year)
     print("The winners are:")
@@ -229,10 +232,19 @@ def main():
         worst_dressed_string = worst_dressed_string + " & " + worst_dressed[-1]
     print("The best dressed of the night are: " + best_dressed_string)
     print("The worst dressed of the night are: " + worst_dressed_string)
+    
     #putting official answers in the json file
     json_object = {}
-    json_object["Hosts"] = hosts
-    j
+    json_object["hosts"] = hosts
+    
+    for award in OFFICIAL_AWARDS_1315:
+        award_dictionary = {}
+        award_dictionary["presenters"] = 
+        award_dictionary["nominees"] =
+        award_dictionary["winner"] = 
+        json_object[award] = award_dictionary
+    
+    #dump json object here
     return
 
 if __name__ == '__main__':

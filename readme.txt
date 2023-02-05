@@ -5,6 +5,8 @@ nltk - https://www.nltk.org/install.html ( pip install nltk )
 Wikipedia-API - https://pypi.org/project/Wikipedia-API/ ( pip install wikipedia-api ) 
 imdbPY - https://pypi.org/project/IMDbPY/ ( pip install imdbPY )
 spaCy -https://spacy.io/usage ( pip install spacy )
+spaCy TextBlob (pip install spacytextblob)
+TextBlob (pip install textblob)
 pandas - https://pandas.pydata.org/ ( pip install pandas )
 
 All grading can be done through running the functions in gg_api.py. Each individual function other than main() and pre_ceremony() calls on a file containing a solution to each sub-problem as presented in the project outline.
@@ -27,3 +29,5 @@ winners, mapped to awards: winners takes in the list of nominees from the previo
 
 
 ADDITIONAL FUNCTIONALITY:
+
+fashion: 
