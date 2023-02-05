@@ -17,6 +17,7 @@ from heapq import nlargest
 from gensim.models import Word2Vec
 import numpy as np
 from textblob import TextBlob
+from spacytextblob.spacytextblob import SpacyTextBlob
 
 nlp = en_core_web_sm.load()
 nltk.download("punkt", quiet = True)
@@ -32,6 +33,14 @@ OFFICIAL_AWARDS_1819 = ['best motion picture - drama', 'best motion picture - mu
 
 #----------- OUR VARIABLES ---------------
 ceremony_name = "Golden Globes"
+
+#list of buckets for corresponding functions/algorithms
+host_bucket = []
+award_bucket = []
+presenter_bucket = []
+nominees_bucket = []
+winner_bucket = []
+
 
 #--------------- HELPER FUNCTIONS BELOW ----------------------
 # Function to clean imported tweets
@@ -68,6 +77,12 @@ def identify_award(award_list_split, tweet_text):
     else:
         return None
 
+def add_to_buckets(tweet):
+    tweet_text = tweets.loc[i]['text']
+    if re.search("host(s*)", tweet_text.lower()) and not re.search("^[Rr][Tt]", tweet_text):
+        #conditions for being in host bucket
+        host_bucket.append(re.sub(hashtag_re, "", tweet_text))
+    
 #----------- INCLUDED FUNCTIONS --------------
 def get_hosts(year):
     '''Hosts is a list of one or more strings. Do NOT change the name
@@ -131,6 +146,7 @@ def pre_ceremony():
     tweets = pd.read_json('gg2013.json')
     for i in range(0, len(tweets)): 
         cleaned_tweet = clean_tweet(tweets.loc[i]['text'])
+        add_to_buckets(cleaned_tweet)
         tweets.at[i, 'text'] = cleaned_tweet
     print("Pre-ceremony processing complete.")
     return
