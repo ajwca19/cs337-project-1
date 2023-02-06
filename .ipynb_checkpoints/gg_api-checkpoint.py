@@ -198,13 +198,13 @@ def main():
     #extracting hosts -
     hosts = get_hosts(year)
     if len(hosts) == 1:
-        print("The host is: " + hosts[0])
+        print("\n\n\nThe host is: " + hosts[0])
     else:
         host_name_string = hosts[0]
         for i in range(1, len(hosts) - 1):
             host_name_string = host_name_string + ", " + hosts[i]
         host_name_string = host_name_string + " & " + hosts[-1]
-        print("The hosts are: " + host_name_string)
+        print("\n\n\nThe hosts are: " + host_name_string)
         
     #extracting awards
     awards = get_awards(year)
@@ -212,12 +212,12 @@ def main():
     for i in range(1, len(awards) - 1):
         award_name_string = award_name_string + ", " + awards[i].title()
     award_name_string = award_name_string + ", & " + awards[-1].title()
-    print("The award categories are:", award_name_string)
+    print("\n\n\nThe award categories are:", award_name_string)
     
     #extracting nominees
     #print("extracting nominees")
     nominee_dict = get_nominees(year)
-    print("The nominees for each award are: \n")
+    print("\n\n\nThe nominees for each award are: \n")
     for award in nominee_dict:
         print(award + ": " + str(nominee_dict[award]))
     
@@ -230,13 +230,13 @@ def main():
     
     #extracting presenters
     presenter_dict = get_presenters(year)
-    print("The presenters for each award are: \n")
+    print("\n\n\nThe presenters for each award are: \n")
     for award in presenter_dict:
         print(award + ": " + str(presenter_dict[award]))
     
     #extracting winners
     winners = get_winner(year)
-    print("The winners are:")
+    print("\n\n\nThe winners are:")
     for award, winner in my_winners.items():
         print(award.title() + ": " + winner['winner'].title() + ", with an average sentiment of " + str(winner['average_polarity']))
         
@@ -250,6 +250,7 @@ def main():
     for i in range(1, len(worst_dressed) - 1):
         worst_dressed_string = worst_dressed_string + ", " + worst_dressed[i]
     worst_dressed_string = worst_dressed_string + " & " + worst_dressed[-1]
+    print("\n\n\n FASHION:")
     print("The best dressed of the night are: " + best_dressed_string)
     print("The worst dressed of the night are: " + worst_dressed_string)
     
@@ -265,11 +266,13 @@ def main():
         json_object[award] = award_dictionary
     
     #dump json object here
-    print(json_object)
+    #print(json_object)
     
     official_json = json.dumps(json_object, indent=4)
     with open("results.json", "w") as outfile:
-        outfile.write(json_object)
+        outfile.write(official_json)
+    
+    print("wrote results to final")
     return
 
 if __name__ == '__main__':

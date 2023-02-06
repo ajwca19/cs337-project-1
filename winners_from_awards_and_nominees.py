@@ -96,8 +96,8 @@ def winner_match(tweets, award_list_split_updated, nominees_list, award_list_uns
         else: # Word "wins" not in tweet
             tweet_nominees = ""
             tweet_award = ""
-    print(match_count_dict)
-    print(sentiment_polarity_dict)
+    #print(match_count_dict)
+    #print(sentiment_polarity_dict)
     return (match_count_dict, sentiment_polarity_dict)
 
 # Function to find the nominee winner based on the "votes", and link in the average tweet sentiment of them winning
