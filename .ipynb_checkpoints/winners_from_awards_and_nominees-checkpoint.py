@@ -27,14 +27,15 @@ import gg_api
 # Function to process the nominee answers
 def nominees_list():
     answers = pd.read_csv('answers.csv', usecols = ['nominees'])
-    nominees_list = []
+    nominees_list = {}
     for i in range(0, len(answers)):
         nominee = answers.loc[i]['nominees']
         nominee = nominee.replace('[', '')
         nominee = nominee.replace(']', '')
         nominee = nominee.split(',')
         nominee = [n.strip() for n in nominee]
-        nominees_list.append(nominee)
+        nominees_list[answers.loc[i]['award']] = nominee
+    print(nominees_list)
     return nominees_list
 
 # Function to process the award names and create initial data structures
@@ -67,7 +68,7 @@ def awards_process(awards_list):
 
 # Function to go through each tweet that says 'wins' and try to identify which award and nominee it's associated with
 def winner_match(tweets, award_list_split_updated, nominees_list, award_list_unsplit, match_count_dict, sentiment_polarity_dict):
-    print("\n\n\nnominees list is " + str(nominees_list))
+    #print("\n\n\nnominees list is " + str(nominees_list))
     for j in range(0, len(tweets)):
         tweet_list = tweets[j].split("wins")
         if len(tweet_list) == 2: # Tweet has the word "wins"
@@ -80,7 +81,7 @@ def winner_match(tweets, award_list_split_updated, nominees_list, award_list_uns
                 #print("likely award number is " + str(likely_award_number))
                 for nominee in nominees_list[award_list_unsplit[likely_award_number]]:
                     #print("nominee is " + nominee + ", likely award number is " + str(likely_award_number))
-                    if re.search(nominee, tweet_nominees):
+                    if re.search(nominee.lower(), tweet_nominees.lower()):
                         # Nominee name shows up on left side of word "wins"
                         full_award_name = award_list_unsplit[likely_award_number]
                         sentiment = TextBlob(tweets[j]) # Sentiment of the tweet mentioning the nominee 'wins'
@@ -95,6 +96,8 @@ def winner_match(tweets, award_list_split_updated, nominees_list, award_list_uns
         else: # Word "wins" not in tweet
             tweet_nominees = ""
             tweet_award = ""
+    print(match_count_dict)
+    print(sentiment_polarity_dict)
     return (match_count_dict, sentiment_polarity_dict)
 
 # Function to find the nominee winner based on the "votes", and link in the average tweet sentiment of them winning

@@ -63,7 +63,7 @@ def identify_award(award_list_split, tweet_text):
     for award in award_list_split: # Loop through awards to get individual lists of keywords
         award_similarities.append(0) # Start the tally at 0
         for word in award: # Look for each of the keywords in the award
-            if re.search(word, tweet_text):
+            if re.search(word.lower(), tweet_text.lower()):
                 award_similarities[curr_award_number] += 1 # Add one to the tally because the tweet has the keyword
         curr_award_number += 1
     if sum(award_similarities) != 0: # At least one award was relevant to the text of a tweet
@@ -148,8 +148,9 @@ def get_winner(year):
     # Processing the award names and creating intial data structures
     # using the hard-coded award names to do this as well
     award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(OFFICIAL_AWARDS_1315)
-    print(winner_bucket)
+    #print(winner_bucket)
     # Going through each tweet and trying to find each award and nominee
+    
     match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(winner_bucket, award_list_split_updated, nominees, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
     # Find the nominee winner based on the "votes", and linking in the average tweet sentiment of them winning
     global my_winners
@@ -180,7 +181,7 @@ def pre_ceremony():
         add_to_buckets(cleaned_tweet)
         tweets.at[i, 'text'] = cleaned_tweet
     print("Pre-ceremony processing complete.")
-    print(winner_bucket)
+    #print(winner_bucket)
     return
 
 def main():
@@ -195,26 +196,26 @@ def main():
     print("Ceremony:", ceremony_name, year)
     
     #extracting hosts -
-    hosts = get_hosts(year)
-    if len(hosts) == 1:
-        print("The host is: " + hosts[0])
-    else:
-        host_name_string = hosts[0]
-        for i in range(1, len(hosts) - 1):
-            host_name_string = host_name_string + ", " + hosts[i]
-        host_name_string = host_name_string + " & " + hosts[-1]
-        print("The hosts are: " + host_name_string)
+    #hosts = get_hosts(year)
+    #if len(hosts) == 1:
+    #    print("The host is: " + hosts[0])
+    #else:
+    #    host_name_string = hosts[0]
+    #    for i in range(1, len(hosts) - 1):
+    #        host_name_string = host_name_string + ", " + hosts[i]
+    #    host_name_string = host_name_string + " & " + hosts[-1]
+    #    print("The hosts are: " + host_name_string)
         
     #extracting awards
-    awards = get_awards(year)
-    award_name_string = awards[0].title()
-    for i in range(1, len(awards) - 1):
-        award_name_string = award_name_string + ", " + awards[i].title()
-    award_name_string = award_name_string + ", & " + awards[-1].title()
-    print("The award categories are:", award_name_string)
+    #awards = get_awards(year)
+    #award_name_string = awards[0].title()
+    #for i in range(1, len(awards) - 1):
+    #    award_name_string = award_name_string + ", " + awards[i].title()
+    #award_name_string = award_name_string + ", & " + awards[-1].title()
+    #print("The award categories are:", award_name_string)
     
     #extracting nominees
-    #print("extracting nominees")
+    print("extracting nominees")
     nominee_dict = get_nominees(year)
     print("The nominees for each award are: \n")
     for award in nominee_dict:
@@ -228,10 +229,10 @@ def main():
     #nominees_list = winners_from_awards_and_nominees.nominees_list()
     
     #extracting presenters
-    presenter_dict = get_presenters(year)
-    print("The presenters for each award are: \n")
-    for award in presenter_dict:
-        print(award + ": " + str(presenter_dict[award]))
+    #presenter_dict = get_presenters(year)
+    #print("The presenters for each award are: \n")
+    #for award in presenter_dict:
+    #    print(award + ": " + str(presenter_dict[award]))
     
     #extracting winners
     winners = get_winner(year)
@@ -240,17 +241,17 @@ def main():
         print(award.title() + ": " + winner['winner'].title() + ", with an average sentiment of " + str(winner['average_polarity']))
         
     #extracting best/worst dressed:
-    best_dressed, worst_dressed = fashion.best_worst_dressed(fashion_bucket)
-    best_dressed_string = best_dressed[0]
-    for i in range(1, len(best_dressed) - 1):
-        best_dressed_string = best_dressed_string + ", " + best_dressed[i]
-    best_dressed_string = best_dressed_string + " & " + best_dressed[-1]
-    worst_dressed_string = worst_dressed[0]
-    for i in range(1, len(worst_dressed) - 1):
-        worst_dressed_string = worst_dressed_string + ", " + worst_dressed[i]
-    worst_dressed_string = worst_dressed_string + " & " + worst_dressed[-1]
-    print("The best dressed of the night are: " + best_dressed_string)
-    print("The worst dressed of the night are: " + worst_dressed_string)
+    #best_dressed, worst_dressed = fashion.best_worst_dressed(fashion_bucket)
+    #best_dressed_string = best_dressed[0]
+    #for i in range(1, len(best_dressed) - 1):
+    #    best_dressed_string = best_dressed_string + ", " + best_dressed[i]
+    #best_dressed_string = best_dressed_string + " & " + best_dressed[-1]
+    #worst_dressed_string = worst_dressed[0]
+    #for i in range(1, len(worst_dressed) - 1):
+    #    worst_dressed_string = worst_dressed_string + ", " + worst_dressed[i]
+    #worst_dressed_string = worst_dressed_string + " & " + worst_dressed[-1]
+    #print("The best dressed of the night are: " + best_dressed_string)
+    #print("The worst dressed of the night are: " + worst_dressed_string)
     
     #putting official answers in the json file
     json_object = {}
