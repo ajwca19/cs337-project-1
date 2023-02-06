@@ -1,0 +1,244 @@
+{
+    "hosts": [
+        "Amy Poehler",
+        "Tina Fey"
+    ],
+    "cecil b. demille award": {
+        "presenters": [],
+        "nominees": [],
+        "winner": ""
+    },
+    "best motion picture - drama": {
+        "presenters": [
+            "julia roberts"
+        ],
+        "nominees": [
+            "argo",
+            "julia roberts",
+            "diego klattenhoff",
+            "steven spielberg",
+            "lincoln"
+        ],
+        "winner": "argo"
+    },
+    "best performance by an actress in a motion picture - drama": {
+        "presenters": [
+            "george clooney",
+            "jessica chastain"
+        ],
+        "nominees": [
+            "kathryn bigelow",
+            "jessica chastain",
+            "calvin klein",
+            "naomi watts"
+        ],
+        "winner": "jessica chastain"
+    },
+    "best performance by an actor in a motion picture - drama": {
+        "presenters": [],
+        "nominees": [
+            "mandy patinkin",
+            "mitt romney",
+            "andrew lincoln",
+            "leonardo dicaprio"
+        ],
+        "winner": ""
+    },
+    "best motion picture - comedy or musical": {
+        "presenters": [],
+        "nominees": [
+            "bill murray"
+        ],
+        "winner": ""
+    },
+    "best performance by an actress in a motion picture - comedy or musical": {
+        "presenters": [
+            "will ferrell",
+            "kristen wiig"
+        ],
+        "nominees": [
+            "bea arthur",
+            "jennifer lawrence",
+            "meryl streep"
+        ],
+        "winner": "jennifer lawrence"
+    },
+    "best performance by an actor in a motion picture - comedy or musical": {
+        "presenters": [],
+        "nominees": [
+            "jack black",
+            "hugh jackman"
+        ],
+        "winner": "hugh jackman"
+    },
+    "best animated feature film": {
+        "presenters": [
+            "jeremy irons"
+        ],
+        "nominees": [
+            "brave",
+            "ted"
+        ],
+        "winner": "brave"
+    },
+    "best foreign language film": {
+        "presenters": [
+            "sylvester stallone",
+            "arnold schwarzenegger"
+        ],
+        "nominees": [
+            "michael haneke"
+        ],
+        "winner": "michael haneke"
+    },
+    "best performance by an actress in a supporting role in a motion picture": {
+        "presenters": [
+            "anne hathaway"
+        ],
+        "nominees": [
+            "anne hathaway",
+            "selena gomez"
+        ],
+        "winner": "anne hathaway"
+    },
+    "best performance by an actor in a supporting role in a motion picture": {
+        "presenters": [],
+        "nominees": [
+            "bradley cooper",
+            "christoph waltz"
+        ],
+        "winner": "christoph waltz"
+    },
+    "best director - motion picture": {
+        "presenters": [
+            "halle berry",
+            "danny boyle",
+            "ben affleck"
+        ],
+        "nominees": [
+            "matt damon",
+            "ben affleck",
+            "ang lee",
+            "jared leto",
+            "jay leno",
+            "jennifer garner",
+            "joe wright"
+        ],
+        "winner": "ben affleck"
+    },
+    "best screenplay - motion picture": {
+        "presenters": [
+            "robert pattinson"
+        ],
+        "nominees": [
+            "robert pattinson",
+            "quentin tarantino",
+            "amanda seyfried"
+        ],
+        "winner": "quentin tarantino"
+    },
+    "best original score - motion picture": {
+        "presenters": [],
+        "nominees": [
+            "life of pi"
+        ],
+        "winner": "life of pi"
+    },
+    "best original song - motion picture": {
+        "presenters": [],
+        "nominees": [
+            "daniel craig",
+            "elton john",
+            "taylor swift",
+            "skyfall"
+        ],
+        "winner": "skyfall"
+    },
+    "best television series - drama": {
+        "presenters": [],
+        "nominees": [],
+        "winner": ""
+    },
+    "best performance by an actress in a television series - drama": {
+        "presenters": [
+            "claire danes",
+            "lea michele"
+        ],
+        "nominees": [
+            "lea michele",
+            "claire danes",
+            "julianne moore",
+            "danny strong"
+        ],
+        "winner": "claire danes"
+    },
+    "best performance by an actor in a television series - drama": {
+        "presenters": [],
+        "nominees": [
+            "toby jones",
+            "damian lewis",
+            "bryan cranston",
+            "jon hamm"
+        ],
+        "winner": "damian lewis"
+    },
+    "best television series - comedy or musical": {
+        "presenters": [
+            "jay leno"
+        ],
+        "nominees": [],
+        "winner": ""
+    },
+    "best performance by an actress in a television series - comedy or musical": {
+        "presenters": [],
+        "nominees": [
+            "lena dunham",
+            "amy poehler"
+        ],
+        "winner": "lena dunham"
+    },
+    "best performance by an actor in a television series - comedy or musical": {
+        "presenters": [],
+        "nominees": [
+            "jim parsons",
+            "matt leblanc",
+            "don cheadle"
+        ],
+        "winner": "don cheadle"
+    },
+    "best mini-series or motion picture made for television": {
+        "presenters": [],
+        "nominees": [],
+        "winner": ""
+    },
+    "best performance by an actress in a mini-series or motion picture made for television": {
+        "presenters": [],
+        "nominees": [],
+        "winner": ""
+    },
+    "best performance by an actor in a mini-series or motion picture made for television": {
+        "presenters": [],
+        "nominees": [
+            "kevin costner"
+        ],
+        "winner": "kevin costner"
+    },
+    "best performance by an actress in a supporting role in a series, mini-series or motion picture made for television": {
+        "presenters": [
+            "kerry washington"
+        ],
+        "nominees": [
+            "jay roach",
+            "maggie smith"
+        ],
+        "winner": "maggie smith"
+    },
+    "best performance by an actor in a supporting role in a series, mini-series or motion picture made for television": {
+        "presenters": [],
+        "nominees": [
+            "ed harris",
+            "tina fey"
+        ],
+        "winner": "ed harris"
+    }
+}
