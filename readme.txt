@@ -15,13 +15,7 @@ Gensim (used for word2vec) - (pip install word2vec)
 All grading can be done through running the functions in gg_api.py. Each individual function other than main() and pre_ceremony() calls on a file containing a solution to each sub-problem as presented in the project outline.
 
 Pre_ceremony() should ALWAYS be run before any individual function, but it's called in main().
-<<<<<<< HEAD
-The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of "OFFICIAL_AWARDS_1315" with the global variable "awards". Our code from start to finish takes me about 6-7 minutes to run.
-
-IMPORTANT: We have seen an error once or twice that is from the Wikipedia api that we use. It's not replicable, nor does it occur every time. Looking online, it seems like it results from factors outside of our control. If this happens, try running the code again and it should fix the problem - if it continues to occur, please tell us!!!!
-=======
 The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of OFFICIAL_AWARDS_1315 with <INSERT VARIABLE NAME HERE THIS IS IMPORTANT>
->>>>>>> 673617da400796184949e61818231eb040118015
 
 THOUGHT PROCESSES BEHIND INDIVIDUAL SUB-PROCESSES:
 pre_ceremony()/preprocessing: reads tweets into a dataframe used in the rest of the problems. Also separates tweets out into buckets to prevent having to go through all 140k tweets over and over again.
