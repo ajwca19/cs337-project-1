@@ -21,6 +21,9 @@ The only function whose input is dependent on another's output is get_winners(),
 IMPORTANT: We have seen an error once or twice that is from the Wikipedia api that we use. It's not replicable, nor does it occur every time. Looking online, it seems like it results from factors outside of our control. If this happens, try running the code again and it should fix the problem - if it continues to occur, please tell us!!!!
 =======
 The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of OFFICIAL_AWARDS_1315 with the global variable "award"
+=======
+The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of OFFICIAL_AWARDS_1315 with <INSERT VARIABLE NAME HERE THIS IS IMPORTANT>
+>>>>>>> 7166e2e93a9e25980ed3035a74af0c1d75046a29
 
 THOUGHT PROCESSES BEHIND INDIVIDUAL SUB-PROCESSES:
 pre_ceremony()/preprocessing: reads tweets into a dataframe used in the rest of the problems. Also separates tweets out into buckets to prevent having to go through all 140k tweets over and over again.
