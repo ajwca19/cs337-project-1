@@ -13,7 +13,7 @@ Gensim (used for word2vec) - (pip install word2vec)
 All grading can be done through running the functions in gg_api.py. Each individual function other than main() and pre_ceremony() calls on a file containing a solution to each sub-problem as presented in the project outline.
 
 Pre_ceremony() should ALWAYS be run before any individual function, but it's called in main().
-The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of "OFFICIAL_AWARDS_1315" with the global variable "awards"
+The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of OFFICIAL_AWARDS_1315 with <INSERT VARIABLE NAME HERE THIS IS IMPORTANT>
 
 THOUGHT PROCESSES BEHIND INDIVIDUAL SUB-PROCESSES:
 pre_ceremony()/preprocessing: reads tweets into a dataframe used in the rest of the problems. Also separates tweets out into buckets to prevent having to go through all 140k tweets over and over again.
@@ -22,15 +22,15 @@ host names: filters tweets to limit those that mention a word form of the lemma 
 
 award names: filters tweets to limit those that mention "nominated for best" or "wins best". Removes all possible words appearing in the top 10 hashtags, and cleans the filtered tweets to remove unnecessary information. Out of the cleaned and filtered tweets, created word embeddings and clustered the embeddings into 25 clustered to represent clusters of possible award phrases. Finally, selected the most frequently mentioned possible award phrase from each cluster, if the phrase was mentioned at least twice. These selected phrases were inferred to be the award names.
 
-presenters, mapped to awards:
+presenters, mapped to awards: 
 
-nominees, mapped to awards:
+nominees, mapped to awards: filters tweets with one of the essential keywords that may suggest a potential nominee and with the word "best". Further parsed by changing words with all caps into only first letter caps, using spaCy's entity recognition parser, using wikipedia API to send a query to the wikipedia server to determine if the extracted word is an existing person and using IMDB to check if a movie is an existing movie to increase accuracy. After changing the type to dictionary, count it again according to the frequency of appearance of each word in the sentence, and sort it using a python function called nlargest, and remove keywords that appear less frequently.
 
 winners, mapped to awards: winners takes in the list of nominees from the previous solutions. Removes stopwords from tweets and then, using a list of provided award names, tries to identify if a tweet is referring to a particular award by counting the number of words from the award name are mentioned in the tweet (the award with the max number of words mentioned wins). If a tweet was matched to an award name, then the tweet is searched to see if a nominee's name is mentioned prior to the word "wins". A count is kept to tally how often nominee's names are mentioned. The nominee with the max count is inferred to be the winner, matched to the award category inferred from the tweet.
 
 
 ADDITIONAL FUNCTIONALITY:
 
-fashion: extracts all tweets mentioning some sort of red carpet outfit or dress, then runs popularity and sentiment analyses on them, clustering by entity. There's a cutoff of relative mentions that determine who had the best and worst looks of the night, which get printed out in a list.
+fashion: 
 
 sentiment of winners: If a tweet mentioned an award and nominee (see winners, mapped to awards), the sentiment (polarity) of the tweet was saved in a list. Once the final winner was inferred, the sentiment of each tweet related to the winner and award category was averaged, to provide an average sentiment of that individual winning that particular award.
