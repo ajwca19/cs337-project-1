@@ -20,15 +20,17 @@ pre_ceremony()/preprocessing: reads tweets into a dataframe used in the rest of 
 
 host names: filters tweets to limit those that mention a word form of the lemma "host". These tweets are then parsed using spaCy's built-in parser and individual peoples' names are extracted. These are clustered by checking for matching tokens and determining that the most popular mention of a name is likely the most "official" representation. Certain use-cases of the word "host" and "hosts" are examined to determine how many hosts there are (=1 or >1), then host(s) is/are determined by popularity in mentions.
 
-award names:
+award names: filters tweets to limit those that mention "nominated for best" or "wins best". Removes all possible words appearing in the top 10 hashtags, and cleans the filtered tweets to remove unnecessary information. Out of the cleaned and filtered tweets, created word embeddings and clustered the embeddings into 25 clustered to represent clusters of possible award phrases. Finally, selected the most frequently mentioned possible award phrase from each cluster, if the phrase was mentioned at least twice. These selected phrases were inferred to be the award names.
 
 presenters, mapped to awards:
 
 nominees, mapped to awards:
 
-winners, mapped to awards: winners takes in the list of nominees from the previous solutions. 
+winners, mapped to awards: winners takes in the list of nominees from the previous solutions. Removes stopwords from tweets and then, using a list of provided award names, tries to identify if a tweet is referring to a particular award by counting the number of words from the award name are mentioned in the tweet (the award with the max number of words mentioned wins). If a tweet was matched to an award name, then the tweet is searched to see if a nominee's name is mentioned prior to the word "wins". A count is kept to tally how often nominee's names are mentioned. The nominee with the max count is inferred to be the winner, matched to the award category inferred from the tweet.
 
 
 ADDITIONAL FUNCTIONALITY:
 
 fashion: 
+
+sentiment of winners: If a tweet mentioned an award and nominee (see winners, mapped to awards), the sentiment (polarity) of the tweet was saved in a list. Once the final winner was inferred, the sentiment of each tweet related to the winner and award category was averaged, to provide an average sentiment of that individual winning that particular award.
