@@ -8,6 +8,7 @@ spaCy -https://spacy.io/usage ( pip install spacy )
 spaCy TextBlob (pip install spacytextblob)
 TextBlob (pip install textblob)
 pandas - https://pandas.pydata.org/ ( pip install pandas )
+Gensim (used for word2vec) - (pip install word2vec)
 
 All grading can be done through running the functions in gg_api.py. Each individual function other than main() and pre_ceremony() calls on a file containing a solution to each sub-problem as presented in the project outline.
 
