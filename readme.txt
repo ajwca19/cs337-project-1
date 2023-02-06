@@ -22,9 +22,9 @@ host names: filters tweets to limit those that mention a word form of the lemma 
 
 award names: filters tweets to limit those that mention "nominated for best" or "wins best". Removes all possible words appearing in the top 10 hashtags, and cleans the filtered tweets to remove unnecessary information. Out of the cleaned and filtered tweets, created word embeddings and clustered the embeddings into 25 clustered to represent clusters of possible award phrases. Finally, selected the most frequently mentioned possible award phrase from each cluster, if the phrase was mentioned at least twice. These selected phrases were inferred to be the award names.
 
-presenters, mapped to awards:
+presenters, mapped to awards: filters tweets to limit those that include phrases like "presenting best [award name]", "announcing best [award name]", etc. Extracts keywords that satisfy the criteria of "person", cross-references names of celebrities to those listed on Wikipedia and IMDB, and maps these to their respective awards from the same tweets
 
-nominees, mapped to awards:
+nominees, mapped to awards: filters tweets to limit those that mention "nominated for best" or "wins best". Extracts keywords that satisfy the criteria of a person, organization, facilities, work of art, global and/or political entities, cross-references the names of these with those listed on Wikipedia and IMDB, and maps these to their respective awards from the same tweets 
 
 winners, mapped to awards: winners takes in the list of nominees from the previous solutions. Removes stopwords from tweets and then, using a list of provided award names, tries to identify if a tweet is referring to a particular award by counting the number of words from the award name are mentioned in the tweet (the award with the max number of words mentioned wins). If a tweet was matched to an award name, then the tweet is searched to see if a nominee's name is mentioned prior to the word "wins". A count is kept to tally how often nominee's names are mentioned. The nominee with the max count is inferred to be the winner, matched to the award category inferred from the tweet.
 
