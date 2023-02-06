@@ -15,6 +15,7 @@ Gensim (used for word2vec) - (pip install word2vec)
 All grading can be done through running the functions in gg_api.py. Each individual function other than main() and pre_ceremony() calls on a file containing a solution to each sub-problem as presented in the project outline.
 
 Pre_ceremony() should ALWAYS be run before any individual function, but it's called in main().
+<<<<<<< HEAD
 
 The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of "OFFICIAL_AWARDS_1315" with the global variable "awards". Our code from start to finish takes me about 6-7 minutes to run.
 
