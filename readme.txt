@@ -18,6 +18,8 @@ Pre_ceremony() should ALWAYS be run before any individual function, but it's cal
 The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of "OFFICIAL_AWARDS_1315" with the global variable "awards". Our code from start to finish takes me about 6-7 minutes to run.
 
 IMPORTANT: We have seen an error once or twice that is from the Wikipedia api that we use. It's not replicable, nor does it occur every time. Looking online, it seems like it results from factors outside of our control. If this happens, try running the code again and it should fix the problem - if it continues to occur, please tell us!!!!
+=======
+>>>>>>> 673617da400796184949e61818231eb040118015
 
 THOUGHT PROCESSES BEHIND INDIVIDUAL SUB-PROCESSES:
 pre_ceremony()/preprocessing: reads tweets into a dataframe used in the rest of the problems. Also separates tweets out into buckets to prevent having to go through all 140k tweets over and over again.
@@ -26,9 +28,7 @@ host names: filters tweets to limit those that mention a word form of the lemma 
 
 award names: filters tweets to limit those that mention "nominated for best" or "wins best". Removes all possible words appearing in the top 10 hashtags, and cleans the filtered tweets to remove unnecessary information. Out of the cleaned and filtered tweets, created word embeddings and clustered the embeddings into 25 clustered to represent clusters of possible award phrases. Finally, selected the most frequently mentioned possible award phrase from each cluster, if the phrase was mentioned at least twice. These selected phrases were inferred to be the award names.
 
-presenters, mapped to awards:
 
-nominees, mapped to awards:
 
 winners, mapped to awards: winners takes in the list of nominees from the previous solutions. Removes stopwords from tweets and then, using a list of provided award names, tries to identify if a tweet is referring to a particular award by counting the number of words from the award name are mentioned in the tweet (the award with the max number of words mentioned wins). If a tweet was matched to an award name, then the tweet is searched to see if a nominee's name is mentioned prior to the word "wins". A count is kept to tally how often nominee's names are mentioned. The nominee with the max count is inferred to be the winner, matched to the award category inferred from the tweet.
 
@@ -36,5 +36,6 @@ winners, mapped to awards: winners takes in the list of nominees from the previo
 ADDITIONAL FUNCTIONALITY:
 
 fashion: extracts all tweets mentioning some sort of red carpet outfit or dress, then runs popularity and sentiment analyses on them, clustering by entity. There's a cutoff of relative mentions that determine who had the best and worst looks of the night, which get printed out in a list.
+fashion: 
 
-sentiment of winners: If a tweet mentioned an award and nominee (see winners, mapped to awards), the sentiment (polarity) of the tweet was saved in a list. Once the final winner was inferred, the sentiment of each tweet related to the winner and award category was averaged, to provide an average sentiment of that individual winning that particular award.
+sentiment of winners: If a tweet mentioned an award and nominee (see winners, mapped to awards), the sentiment (polarity) of the tweet was saved in a list. Once the final winner was inferred, the sentiment of each tweet related to the winner and award category was averaged, to provide an average sentiment of that individual winning that particular award.sentiment of winners: If a tweet mentioned an award and nominee (see winners, mapped to awards), the sentiment (polarity) of the tweet was saved in a list. Once the final winner was inferred, the sentiment of each tweet related to the winner and award category was averaged, to provide an average sentiment of that individual winning that particular award.
