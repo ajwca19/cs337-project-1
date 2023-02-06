@@ -10,7 +10,7 @@ from collections import Counter
 import en_core_web_sm
 
 nlp = en_core_web_sm.load()
-nltk.download("punkt")
+nltk.download("punkt", quiet=True)
 
 # get_names(pandas DataFrame, string) -> listof(string)
 # get_names() takes in a DataFrame containing pre-processed tweets

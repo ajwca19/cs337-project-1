@@ -172,7 +172,7 @@ def counting_name_and_match(tweets, entity_list, search_type, input_year):
     wiki = wk.Wikipedia("en")
 
     if search_type == "PERSON":
-        print("Search_Type : ", search_type, "\nI'm searching for Wikipedia, so please wait while watching YouTube.")
+        #print("Search_Type : ", search_type, "\nI'm searching for Wikipedia, so please wait while watching YouTube.")
         for k in str_list:
             try:
                 k_wiki = "_".join(str(k).title().split(" ")).strip()
@@ -200,7 +200,7 @@ def counting_name_and_match(tweets, entity_list, search_type, input_year):
     movie_name_list = []
     ia = imdb.Cinemagoer()
 
-    print("Search_Type : ", search_type, "\nI'm searching for IMDB, so please wait while watching YouTube.")
+    #print("Search_Type : ", search_type, "\nI'm searching for IMDB, so please wait while watching YouTube.")
     for name in movie_candidate_list:
         ex = ""
         try:
@@ -255,7 +255,7 @@ def nominee_award_find_in_tweet(aw_list, aw_word_list, no_list, tweets):
                     no_dict[i][k] += 1
 
     no_dict_1 = {k: {i: no_dict[k][i] for i in nlargest(7, no_dict[k], key=no_dict[k].get)} for k in no_dict}
-    print(no_dict_1)
+    #print(no_dict_1)
 
     for k_1, v_1 in no_dict.items():
 
@@ -280,7 +280,7 @@ def nominee_award_find_in_tweet(aw_list, aw_word_list, no_list, tweets):
             if coinBool:
                 break
 
-    print(aw_dict)
+    #print(aw_dict)
     print(pd.DataFrame(list(aw_dict.items()), columns=['Award_List', 'Nominee']))
 
     return aw_dict
@@ -313,7 +313,7 @@ def main(tweets, ceremony_name, year, aw_list):
     Final_list = list(set(A_List + A_B_list + A_B_C_List))
     nominee_all_list = list(set(A_List + A_B_list + A_B_C_List))
 
-    print(time.time() - start_time)
+    #print(time.time() - start_time)
 
     # Final_list = pd.read_csv("./nominee_Final.csv")["nominee"].values.tolist()
     award_nominee_dict = nominee_award_find_in_tweet(aw_list, award_word_list, Final_list, tweets_3)
