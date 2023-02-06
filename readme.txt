@@ -13,7 +13,7 @@ Gensim (used for word2vec) - (pip install word2vec)
 All grading can be done through running the functions in gg_api.py. Each individual function other than main() and pre_ceremony() calls on a file containing a solution to each sub-problem as presented in the project outline.
 
 Pre_ceremony() should ALWAYS be run before any individual function, but it's called in main().
-The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of OFFICIAL_AWARDS_1315 with <INSERT VARIABLE NAME HERE THIS IS IMPORTANT>
+The only function whose input is dependent on another's output is get_winners(), which uses a nominees list defined as a global variable in the body of get_nominees(). All functions are currently hardcoded to use the official awards list, but this could be modified to use our own list of awards as desired simply by replacing mentions of "OFFICIAL_AWARDS_1315" with the global variable "awards"
 
 THOUGHT PROCESSES BEHIND INDIVIDUAL SUB-PROCESSES:
 pre_ceremony()/preprocessing: reads tweets into a dataframe used in the rest of the problems. Also separates tweets out into buckets to prevent having to go through all 140k tweets over and over again.
@@ -31,6 +31,6 @@ winners, mapped to awards: winners takes in the list of nominees from the previo
 
 ADDITIONAL FUNCTIONALITY:
 
-fashion: 
+fashion: extracts all tweets mentioning some sort of red carpet outfit or dress, then runs popularity and sentiment analyses on them, clustering by entity. There's a cutoff of relative mentions that determine who had the best and worst looks of the night, which get printed out in a list.
 
 sentiment of winners: If a tweet mentioned an award and nominee (see winners, mapped to awards), the sentiment (polarity) of the tweet was saved in a list. Once the final winner was inferred, the sentiment of each tweet related to the winner and award category was averaged, to provide an average sentiment of that individual winning that particular award.
