@@ -213,7 +213,9 @@ def main():
     
     #extracting nominees
     nominee_dict = get_nominees(year)
-    print("The nominees for each award are: " + str(nominee_dict))
+    print("The nominees for each award are: \n")
+    for award in nominee_dict:
+        print(award + ": " + str(nominee_dict[award]))
     
     # How to use nominee list -> nominee_from_tweets.nominee_all_list
     # ['paul rudd', 'daniel craig', 'damian lewis', 'kevin costner', ... ]
@@ -224,7 +226,9 @@ def main():
     
     #extracting presenters
     presenter_dict = get_presenters(year)
-    print("The presenters for each award are: " + str(presenter_dict))
+    print("The presenters for each award are: \n")
+    for award in presenter_dict:
+        print(award + ": " + str(presenter_dict[award]))
     
     #extracting winners
     winners = get_winner(year)

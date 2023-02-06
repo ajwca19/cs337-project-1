@@ -13,7 +13,7 @@ nominee_all_list = []
 
 # Removing stopwords from the award list 
 def remove_stopword_award_list(award_list):
-    nltk.download('stopwords')
+    nltk.download('stopwords',quiet=True)
     stops = set(stopwords.words('english'))
     nltk_list = []
 
@@ -87,7 +87,7 @@ def cleansing_finding_keyword(tweets, aw_word_list):
 def cleansing_remove_useless_capital(tweets):
 
     # nltk.download('punkt')
-    nltk.download('averaged_perceptron_tagger')
+    nltk.download('averaged_perceptron_tagger', quiet=True)
 
     ret_list = []
 
@@ -281,7 +281,7 @@ def nominee_award_find_in_tweet(aw_list, aw_word_list, no_list, tweets):
                 break
 
     #print(aw_dict)
-    print(pd.DataFrame(list(aw_dict.items()), columns=['Award_List', 'Nominee']))
+    #print(pd.DataFrame(list(aw_dict.items()), columns=['Award_List', 'Nominee']))
 
     return aw_dict
 
