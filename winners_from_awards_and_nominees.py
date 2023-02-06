@@ -67,7 +67,7 @@ def awards_process(awards_list):
 
 # Function to go through each tweet that says 'wins' and try to identify which award and nominee it's associated with
 def winner_match(tweets, award_list_split_updated, nominees_list, award_list_unsplit, match_count_dict, sentiment_polarity_dict):
-    print("\n\n\nnominees list is " + str(nominees_list))
+    #print("\n\n\nnominees list is " + str(nominees_list))
     for j in range(0, len(tweets)):
         tweet_list = tweets[j].split("wins")
         if len(tweet_list) == 2: # Tweet has the word "wins"
@@ -77,12 +77,13 @@ def winner_match(tweets, award_list_split_updated, nominees_list, award_list_uns
             if likely_award_number is not None:
                 # Try to identify the nominee based on the nominees for the most likely award
                 # Also perform sentiment analysis on the tweets to get a sense of people's opinions on a nominee winning their award
-                
-                for nominee in nominees_list[likely_award_number]:
+                #print("likely award number is " + str(likely_award_number))
+                for nominee in nominees_list[award_list_unsplit[likely_award_number]]:
+                    #print("nominee is " + nominee + ", likely award number is " + str(likely_award_number))
                     if re.search(nominee, tweet_nominees):
                         # Nominee name shows up on left side of word "wins"
                         full_award_name = award_list_unsplit[likely_award_number]
-                        sentiment = TextBlob(text) # Sentiment of the tweet mentioning the nominee 'wins'
+                        sentiment = TextBlob(tweets[j]) # Sentiment of the tweet mentioning the nominee 'wins'
                         polarity = sentiment.sentences[0].sentiment.polarity
                         if nominee not in match_count_dict[full_award_name]:
                             match_count_dict[full_award_name][nominee] = 1

@@ -22,7 +22,7 @@ def best_worst_dressed(fashion_tweets):
     entities_clusters = {} #dictionary with key: entity name and value: name of "representative" entity
     entities_polarities = {}
     parsed_tweets = []
-    for tweet in tweets_with_fashion_mention:
+    for tweet in fashion_tweets:
         parsed_tweet = nlp(tweet)
         parsed_tweets.append(parsed_tweet)
         for entity in parsed_tweet.ents:

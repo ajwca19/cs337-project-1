@@ -148,6 +148,7 @@ def get_winner(year):
     # Processing the award names and creating intial data structures
     # using the hard-coded award names to do this as well
     award_list_split_updated, award_list_unsplit, match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.awards_process(OFFICIAL_AWARDS_1315)
+    print(winner_bucket)
     # Going through each tweet and trying to find each award and nominee
     match_count_dict, sentiment_polarity_dict = winners_from_awards_and_nominees.winner_match(winner_bucket, award_list_split_updated, nominees, award_list_unsplit, match_count_dict, sentiment_polarity_dict)
     # Find the nominee winner based on the "votes", and linking in the average tweet sentiment of them winning
@@ -179,6 +180,7 @@ def pre_ceremony():
         add_to_buckets(cleaned_tweet)
         tweets.at[i, 'text'] = cleaned_tweet
     print("Pre-ceremony processing complete.")
+    print(winner_bucket)
     return
 
 def main():
@@ -192,7 +194,7 @@ def main():
     year = 2013
     print("Ceremony:", ceremony_name, year)
     
-    #extracting hosts
+    #extracting hosts -
     hosts = get_hosts(year)
     if len(hosts) == 1:
         print("The host is: " + hosts[0])
@@ -212,6 +214,7 @@ def main():
     print("The award categories are:", award_name_string)
     
     #extracting nominees
+    #print("extracting nominees")
     nominee_dict = get_nominees(year)
     print("The nominees for each award are: \n")
     for award in nominee_dict:

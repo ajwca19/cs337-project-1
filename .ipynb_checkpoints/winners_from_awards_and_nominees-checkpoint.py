@@ -77,12 +77,13 @@ def winner_match(tweets, award_list_split_updated, nominees_list, award_list_uns
             if likely_award_number is not None:
                 # Try to identify the nominee based on the nominees for the most likely award
                 # Also perform sentiment analysis on the tweets to get a sense of people's opinions on a nominee winning their award
-                
-                for nominee in nominees_list[likely_award_number]:
+                #print("likely award number is " + str(likely_award_number))
+                for nominee in nominees_list[award_list_unsplit[likely_award_number]]:
+                    #print("nominee is " + nominee + ", likely award number is " + str(likely_award_number))
                     if re.search(nominee, tweet_nominees):
                         # Nominee name shows up on left side of word "wins"
                         full_award_name = award_list_unsplit[likely_award_number]
-                        sentiment = TextBlob(text) # Sentiment of the tweet mentioning the nominee 'wins'
+                        sentiment = TextBlob(tweets[j]) # Sentiment of the tweet mentioning the nominee 'wins'
                         polarity = sentiment.sentences[0].sentiment.polarity
                         if nominee not in match_count_dict[full_award_name]:
                             match_count_dict[full_award_name][nominee] = 1
